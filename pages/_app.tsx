@@ -55,8 +55,8 @@ const App = ({ Component, ...rest }: AppProps) => {
       </Head>
 
       <Provider store={store}>
-        <Layout>
-          <Navbar navTextArr={navTextArr} />
+        <Layout currentURL={currentURL}>
+          <Navbar navTextArr={navTextArr} currentURL={currentURL} />
           <Component {...props.pageProps} />
         </Layout>
       </Provider>

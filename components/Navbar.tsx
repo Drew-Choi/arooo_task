@@ -3,7 +3,13 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
+
+type StyledProps = {
+  scrollValue: number;
+  currentURL: string;
+};
 
 // 전체 Container---
 const Nav = styled.nav`
@@ -23,15 +29,19 @@ const Nav = styled.nav`
 // Logo 부분---
 const LogoWrap = styled.div`
   position: relative;
-  display: ${({ scrollValue }: { scrollValue: number }) =>
-    scrollValue < 20 ? 'none' : 'flex'};
+  display: ${({ scrollValue, currentURL }: StyledProps) =>
+    currentURL === '/write' ? 'flex' : scrollValue < 10 ? 'none' : 'flex'};
   height: 50px;
   justify-content: center;
   align-items: center;
   padding: 0px 20px;
 
-  transform: ${({ scrollValue }: { scrollValue: number }) =>
-    scrollValue < 70 ? 'translateY(-60px)' : 'translateY(0)'};
+  transform: ${({ scrollValue, currentURL }: StyledProps) =>
+    currentURL === '/write'
+      ? 'translateY(0)'
+      : scrollValue < 70
+      ? 'translateY(-60px)'
+      : 'translateY(0)'};
   transition: 0.5s ease-in-out;
 `;
 
@@ -46,8 +56,8 @@ const Logo = styled.p`
 // Menu 부분---
 const StyleBox = styled.div`
   position: relative;
-  display: ${({ scrollValue }: { scrollValue: number }) =>
-    scrollValue < 20 ? 'none' : 'flex'};
+  display: ${({ scrollValue, currentURL }: StyledProps) =>
+    currentURL === '/write' ? 'flex' : scrollValue < 10 ? 'none' : 'flex'};
   justify-content: center;
   align-items: center;
   height: 50px;
@@ -58,8 +68,12 @@ const StyleBox = styled.div`
   border-bottom-right-radius: 5px;
   box-shadow: 0px 1px 3px 0.5px rgba(0, 0, 0, 0.5);
 
-  transform: ${({ scrollValue }: { scrollValue: number }) =>
-    scrollValue < 70 ? 'translateY(-60px)' : 'translateY(0)'};
+  transform: ${({ scrollValue, currentURL }: StyledProps) =>
+    currentURL === '/write'
+      ? 'translateY(0)'
+      : scrollValue < 70
+      ? 'translateY(-60px)'
+      : 'translateY(0)'};
   transition: 0.5s ease-in-out;
 `;
 // ------------
@@ -67,6 +81,7 @@ const StyleBox = styled.div`
 // Navbar컴포넌트 props타입
 type navProps = {
   navTextArr: { text: string; href: string }[];
+  currentURL: string;
 };
 
 // 리덕스 state 타입
@@ -74,14 +89,15 @@ interface TestRedux {
   scroll_Handle: number;
 }
 
-const Navbar: NextPage<navProps> = ({ navTextArr }) => {
+const Navbar: NextPage<navProps> = ({ navTextArr, currentURL }) => {
   // 리덕스 설정
   const scrollValue = useSelector((state: TestRedux) => state.scroll_Handle);
-  console.log(scrollValue);
+
+  console.log('네브바 재랜더링여부 확인');
 
   return (
     <Nav>
-      <LogoWrap scrollValue={scrollValue}>
+      <LogoWrap scrollValue={scrollValue} currentURL={currentURL}>
         <Logo>
           <span
             css={css`
@@ -101,7 +117,7 @@ const Navbar: NextPage<navProps> = ({ navTextArr }) => {
         </Logo>
       </LogoWrap>
 
-      <StyleBox scrollValue={scrollValue}>
+      <StyleBox scrollValue={scrollValue} currentURL={currentURL}>
         {navTextArr.map((el) => (
           <Link
             css={css`

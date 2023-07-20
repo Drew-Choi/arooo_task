@@ -1,12 +1,8 @@
-import { value } from '@/store/modules/scroll_Handle';
+import { reset, value } from '@/store/modules/scroll_Handle';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import { ReactNode, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-
-type ChildreProps = {
-  children: ReactNode;
-};
 
 const Container = styled.div`
   position: relative;
@@ -20,22 +16,32 @@ const Container = styled.div`
   }
 `;
 
-const Layout: NextPage<ChildreProps> = ({ children }) => {
+// 레이아웃 props타입
+type LayoutProps = {
+  children: ReactNode;
+  currentURL: string;
+};
+
+const Layout: NextPage<LayoutProps> = ({ children, currentURL }) => {
+  console.log('레이아웃 컴포넌트 재랜더링되는지 체크');
+
   // 리덕스 설정
   const dispatch = useDispatch();
 
-  // 레이아웃에서 스크롤 감지
-  const handleScrollValue = () => {
-    dispatch(value(window.scrollY));
-  };
-
   useEffect(() => {
-    window.addEventListener('scroll', handleScrollValue);
+    const handleScrollValue = () => {
+      dispatch(value(window.scrollY));
+    };
 
+    if (currentURL !== '/write') {
+      window.addEventListener('scroll', handleScrollValue);
+    }
+
+    dispatch(reset());
     return () => {
       window.removeEventListener('scroll', handleScrollValue);
     };
-  }, []);
+  }, [currentURL]);
 
   return <Container>{children}</Container>;
 };
