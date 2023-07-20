@@ -1,9 +1,7 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
-
-type navProps = {
-  navTextArr: string[];
-};
+import Link from 'next/link';
 
 // 전체 Container---
 const Nav = styled.nav`
@@ -45,16 +43,11 @@ const StyleBox = styled.div`
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 5px;
 `;
-
-const P = styled.p`
-  margin: 0px;
-  padding-right: 30px;
-  font-size: 15px;
-  :last-child {
-    padding-right: 0px;
-  }
-`;
 // ------------
+
+type navProps = {
+  navTextArr: { text: string; href: string }[];
+};
 
 const Navbar: NextPage<navProps> = ({ navTextArr }) => {
   return (
@@ -64,8 +57,21 @@ const Navbar: NextPage<navProps> = ({ navTextArr }) => {
       </LogoWrap>
 
       <StyleBox>
-        {navTextArr.map((text) => (
-          <P key={text}>{text}</P>
+        {navTextArr.map((el) => (
+          <Link
+            css={css`
+              margin: 0px;
+              padding-right: 30px;
+              font-size: 15px;
+              :last-child {
+                padding-right: 0px;
+              }
+            `}
+            href={el.href}
+            key={el.text}
+          >
+            {el.text}
+          </Link>
         ))}
       </StyleBox>
     </Nav>
