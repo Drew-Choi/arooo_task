@@ -1,4 +1,15 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  swcMinify: true,
+  reactStrictMode: true,
 
-module.exports = nextConfig
+  // emotion 설정
+  compiler: {
+    emotion: true,
+  },
+  // images: {
+  //   domains: [],
+  // },
+};
+
+module.exports = nextConfig;
