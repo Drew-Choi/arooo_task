@@ -1,10 +1,11 @@
-import { color } from '@/style/theme';
+import { color } from '@/theme/theme_other';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import FadeIn from './FadeIn';
 
 type StyledProps = {
   scrollValue: number;
@@ -23,6 +24,10 @@ const Nav = styled.nav`
   width: 100%;
   height: 50px;
   z-index: 3;
+
+  @media screen and (max-width: 820px) {
+    padding: 0px 5vw;
+  }
 `;
 // ---------
 
@@ -67,6 +72,7 @@ const StyleBox = styled.div`
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 5px;
   box-shadow: 0px 1px 3px 0.5px rgba(0, 0, 0, 0.5);
+  margin-right: 20px;
 
   transform: ${({ scrollValue, currentURL }: StyledProps) =>
     currentURL === '/write'
@@ -77,6 +83,11 @@ const StyleBox = styled.div`
   transition: 0.5s ease-in-out;
 `;
 // ------------
+
+// 서브타이틀----
+const SubTitle = styled.p`
+  margin: 0px;
+`;
 
 // Navbar컴포넌트 props타입
 type navProps = {
@@ -92,8 +103,6 @@ interface TestRedux {
 const Navbar: NextPage<navProps> = ({ navTextArr, currentURL }) => {
   // 리덕스 설정
   const scrollValue = useSelector((state: TestRedux) => state.scroll_Handle);
-
-  console.log('네브바 재랜더링여부 확인');
 
   return (
     <Nav>
@@ -115,6 +124,28 @@ const Navbar: NextPage<navProps> = ({ navTextArr, currentURL }) => {
           </span>
           CINE
         </Logo>
+
+        {currentURL === '/write' ? (
+          <FadeIn index={0}>
+            <SubTitle
+              css={css`
+                font-size: 15px;
+                padding: 20px;
+              `}
+            >
+              <span
+                css={css`
+                  padding-right: 15px;
+                `}
+              >
+                |
+              </span>{' '}
+              Write Your Criticism
+            </SubTitle>
+          </FadeIn>
+        ) : (
+          <></>
+        )}
       </LogoWrap>
 
       <StyleBox scrollValue={scrollValue} currentURL={currentURL}>

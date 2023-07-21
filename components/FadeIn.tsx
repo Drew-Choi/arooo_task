@@ -1,13 +1,13 @@
 import { Fade } from '@mui/material';
-import { NextPage } from 'next';
-import { ReactElement } from 'react';
+import { ReactElement, ReactNode } from 'react';
 
-type FadeInProps = {
+const FadeIn = ({
+  children,
+  index,
+}: {
   children: ReactElement;
   index: number;
-};
-
-const FadeIn: NextPage<FadeInProps> = ({ children, index }) => {
+}) => {
   return (
     <Fade
       in

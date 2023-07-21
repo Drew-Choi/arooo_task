@@ -23,8 +23,6 @@ type LayoutProps = {
 };
 
 const Layout: NextPage<LayoutProps> = ({ children, currentURL }) => {
-  console.log('레이아웃 컴포넌트 재랜더링되는지 체크');
-
   // 리덕스 설정
   const dispatch = useDispatch();
 

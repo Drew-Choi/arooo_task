@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { head_title } from '@/function/head_title';
 import Proptypes from 'prop-types';
-import { Provider, useDispatch } from 'react-redux';
+import { Provider } from 'react-redux';
 import Layout from '@/components/Layout';
 import Navbar from '@/components/Navbar';
 import wrapper from '@/store/configStore';
