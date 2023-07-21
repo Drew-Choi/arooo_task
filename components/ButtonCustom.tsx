@@ -6,7 +6,7 @@ import { color } from '../theme/theme_other';
 interface BtnProps {
   children: ReactNode | string;
   className?: string;
-  onClick?: () => void;
+  onClick?: any;
 }
 
 const ButtonCustom: NextPage<BtnProps> = ({ children, onClick, className }) => {

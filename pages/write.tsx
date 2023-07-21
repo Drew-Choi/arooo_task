@@ -5,7 +5,7 @@ import { NextPage } from 'next';
 import { useRef, useState } from 'react';
 import FadeIn from '@/components/FadeIn';
 import dynamic from 'next/dynamic';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 
 const EditorCustom = dynamic(() => import('@/components/EditorCustom'), {
@@ -19,22 +19,28 @@ const Write: NextPage = () => {
     undefined,
   );
 
+  // 글 제목 담는 곳
   const titleRef = useRef<HTMLInputElement>(null);
+
+  // 이미지 파일명 담는 곳
+  const imgRef = useRef<HTMLInputElement>(null);
 
   // 글 등록 요청 함수
   // onClick으로 데이터 body에 담아 보냄
+  // title, content(json Raw File), img
   const handleSave = async () => {
     try {
-      const response = await axios.post('/api/write', {
+      const response: AxiosResponse<any> = await axios.post('/api/write', {
         title: titleRef.current?.value,
         content: JSON.stringify(convertToRaw(editorState!.getCurrentContent())),
+        img: imgRef.current?.value,
       });
 
       if (response.status === 200) {
         alert('Success');
         router.push('/');
       } else {
-        alert('Fail');
+        alert(response.data.message);
       }
     } catch (err) {
       console.error(err);
@@ -50,17 +56,30 @@ const Write: NextPage = () => {
       `}
     >
       <FadeIn index={1}>
-        <input
-          ref={titleRef}
-          css={css`
-            width: 100%;
-            /* background-color: red; */
-            box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.2);
-            margin: 20px 0px;
-            padding: 10px 30px;
-          `}
-          placeholder="제목"
-        />
+        <div className="flex">
+          <input
+            className="flex-1"
+            ref={titleRef}
+            css={css`
+              /* background-color: red; */
+              box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.2);
+              margin: 20px 0px;
+              padding: 10px 30px;
+            `}
+            placeholder="제목"
+          />
+          <input
+            className="flex-2"
+            ref={imgRef}
+            css={css`
+              /* background-color: red; */
+              box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.2);
+              margin: 20px 0px;
+              padding: 10px 30px;
+            `}
+            placeholder="이미지 파일명"
+          />
+        </div>
       </FadeIn>
 
       <FadeIn index={2}>

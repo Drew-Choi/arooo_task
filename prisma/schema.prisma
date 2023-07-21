@@ -16,6 +16,7 @@ model articles {
   title String
   content String
   like_count Int
+  img String
 
   @@index([id])
 }

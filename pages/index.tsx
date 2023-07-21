@@ -7,7 +7,9 @@ import { BsFillArrowDownCircleFill } from 'react-icons/bs';
 import FadeIn from '@/components/FadeIn';
 import { Fade } from '@mui/material';
 import axios from 'axios';
-import { useRouter } from 'next/router';
+import ArticleThum from '@/components/ArticleThum';
+import { IndexDataType } from '@/function/types';
+import { useCallback, useEffect, useState } from 'react';
 
 // 서버사이드렌더
 export const getServerSideProps = async () => {
@@ -30,17 +32,65 @@ export const getServerSideProps = async () => {
     console.error(err);
   }
 };
+// -------------------------------------------------------
+// ssr 프롭스 데이터 타입 설정
+type SsrDataType = {
+  ssrData: [IndexDataType];
+};
 
-const Home: NextPage = ({ ssrData }) => {
-  console.log('인덱스컴포');
-
+const Home: NextPage<SsrDataType> = ({ ssrData }) => {
   // 리덕스 state 타입
   interface TestRedux {
     scroll_Handle: number;
   }
   const scrollValue = useSelector((state: TestRedux) => state.scroll_Handle);
+  console.log(scrollValue);
 
-  // 모든 아이템 가져오기
+  // 이전 skip위치 확인용
+  const [skip, setSkip] = useState<number>(0);
+  console.log('skip위치: ', skip);
+
+  // 이전 스크롤 위치 확인용
+  const [scrollSpot, setScrollSpot] = useState<number>(2100);
+  console.log('stop위치: ', scrollSpot);
+
+  // 첫 페이지 로딩시 SSR의 take값(고정)
+  const Take = 9;
+
+  // 처음에 SSR로 받아서 data전용 상태보관이 없어 생성
+  const [data, setData] = useState<IndexDataType[]>([]);
+  console.log('데이터들어온다잉 :', data);
+
+  // 무한스크롤, 스크롤 위치에 다라 요청이 가도록 설정
+  const getArticleInfinit = useCallback(async () => {
+    console.log('큐!!!!!!!!');
+
+    setScrollSpot((cur) => cur + 1350);
+    const nextPage = skip + Take;
+    try {
+      const response = await axios.get(
+        `/api/library/content?skip=${nextPage}&take=${Take}`,
+      );
+
+      if (response.status === 200 && response.data.items.length !== 0) {
+        setData((cur) => {
+          let copy = [...cur, ...response.data.items];
+          return copy;
+        });
+        setSkip(nextPage);
+      }
+    } catch (err) {
+      console.error('API요청 오류: ', err);
+    }
+  }, [skip]);
+
+  useEffect(() => {
+    console.log('스크롤감시자!!!!!!!');
+
+    if (scrollValue >= scrollSpot) {
+      getArticleInfinit();
+    }
+  }, [scrollValue]);
 
   return (
     // 메인 컨테이너
@@ -55,7 +105,7 @@ const Home: NextPage = ({ ssrData }) => {
         css={css`
           position: relative;
           width: 100%;
-          height: 1000px;
+          height: 1500px;
         `}
       >
         {/* 사람이미지 */}
@@ -205,22 +255,22 @@ const Home: NextPage = ({ ssrData }) => {
           position: relative;
           width: 100%;
           height: auto;
+          margin-bottom: 200px;
         `}
       >
-        {/* {data &&
-          data.map((el) => (
-            <div
-              key={el.id}
-              css={css`
-                background-color: red;
-              `}
-            >
-              <p>{el.id}</p>
-              <p>{el.title}</p>
-              <p>{el.content}</p>
-              <p>{el.like_count}</p>
-            </div>
-          ))} */}
+        <div className="grid grid-cols-3 gap-5">
+          {ssrData &&
+            scrollValue > 571 &&
+            ssrData.map((article, index) => (
+              <ArticleThum index={index} key={article.id} article={article} />
+            ))}
+        </div>
+        <div className="grid grid-cols-3 gap-5 mt-5">
+          {data &&
+            data.map((article, index) => (
+              <ArticleThum index={index} key={article.id} article={article} />
+            ))}
+        </div>
       </section>
     </main>
   );

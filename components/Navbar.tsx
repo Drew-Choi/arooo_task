@@ -53,6 +53,7 @@ const LogoWrap = styled.div`
 const Logo = styled.p`
   position: relative;
   margin: 0px;
+  letter-spacing: 3px;
   font-size: 30px;
   font-weight: 900;
   text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
