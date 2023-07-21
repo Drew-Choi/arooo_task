@@ -4,6 +4,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { Dispatch, SetStateAction } from 'react';
 import { EditorProps } from 'react-draft-wysiwyg';
 import { EditorState } from 'draft-js';
+import { useRouter } from 'next/router';
 
 const Editor = dynamic<EditorProps>(
   () => import('react-draft-wysiwyg').then((module) => module.Editor),
@@ -28,7 +29,9 @@ const EditorCustom = ({
         editorState={editorState}
         toolbarClassName="editorToolbar-hidden"
         wrapperClassName={`wrapper-class ${style.editorWrap}`}
-        editorClassName={`editor-class  ${style.editor}`}
+        editorClassName={`editor-class  ${
+          readOnly ? style.editor_readOnly : style.editor
+        }`}
         onEditorStateChange={onEditorStateChange}
         toolbar={{ option: ['inline', 'list', 'textAlign', 'link'] }}
         localization={{ locale: 'ko' }}

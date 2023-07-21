@@ -1,8 +1,10 @@
+import { like } from '@/store/modules/likeget';
 import { reset, value } from '@/store/modules/scroll_Handle';
 import styled from '@emotion/styled';
+import axios from 'axios';
 import { NextPage } from 'next';
 import { ReactNode, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Container = styled.div`
   position: relative;
@@ -22,9 +24,16 @@ type LayoutProps = {
   currentURL: string;
 };
 
+// 리덕스 state 타입
+interface LikeRedux {
+  likeget: { req: boolean };
+}
+
 const Layout: NextPage<LayoutProps> = ({ children, currentURL }) => {
   // 리덕스 설정
   const dispatch = useDispatch();
+  // 좋아요 상태값 요청용
+  const reqLike = useSelector((state: LikeRedux) => state.likeget.req);
 
   useEffect(() => {
     const handleScrollValue = () => {
@@ -40,6 +49,23 @@ const Layout: NextPage<LayoutProps> = ({ children, currentURL }) => {
       window.removeEventListener('scroll', handleScrollValue);
     };
   }, [currentURL]);
+
+  // 좋아요 전역적인 업데이트
+  useEffect(() => {
+    const getLikeAll = async () => {
+      try {
+        const response = await axios.get('/api/getLike');
+
+        console.log(response);
+
+        if (response.status !== 200) return alert(response.data.message);
+        dispatch(like(response.data.items));
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getLikeAll();
+  }, [reqLike]);
 
   return <Container>{children}</Container>;
 };

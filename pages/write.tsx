@@ -7,6 +7,8 @@ import FadeIn from '@/components/FadeIn';
 import dynamic from 'next/dynamic';
 import axios, { AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import BackBTN from '@/components/BackBTN';
 
 const EditorCustom = dynamic(() => import('@/components/EditorCustom'), {
   loading: () => <div>Loading...</div>,
@@ -92,10 +94,16 @@ const Write: NextPage = () => {
       <FadeIn index={3}>
         <div
           css={css`
-            text-align: right;
-            padding: 0px 20px;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            padding: 0px 30px;
           `}
         >
+          <Link href="/">
+            <BackBTN />
+          </Link>
+
           <ButtonCustom onClick={handleSave}>등록하기</ButtonCustom>
         </div>
       </FadeIn>

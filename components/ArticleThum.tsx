@@ -2,19 +2,25 @@ import { IndexDataType } from '@/function/types';
 import { css } from '@emotion/react';
 import { NextPage } from 'next';
 import Image from 'next/image';
-import { AiOutlineHeart } from 'react-icons/ai';
+import { AiTwotoneHeart } from 'react-icons/ai';
 import { color } from '@/theme/theme_other';
 import FadeIn from './FadeIn';
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 // ssr 프롭스 데이터 타입 설정
 type SsrDataType = {
   article: IndexDataType;
   index: number;
+  heartOnClick?: any;
+  likeCount: { like_count: number }[];
 };
 
-const ArticleThum: NextPage<SsrDataType> = ({ article, index }) => {
+const ArticleThum: NextPage<SsrDataType> = ({
+  article,
+  index,
+  heartOnClick,
+  likeCount,
+}) => {
   return (
     <FadeIn index={index % 3 === 0 ? 0 : index % 3 === 2 ? 1 : 0.5}>
       <div
@@ -27,7 +33,7 @@ const ArticleThum: NextPage<SsrDataType> = ({ article, index }) => {
           border-radius: 10px;
         `}
       >
-        <Link href={`/article/${article.id}`}>
+        <Link href={`/article/${article.id}?index=${index}`}>
           <Image
             css={css`
               border-radius: 10px;
@@ -48,7 +54,7 @@ const ArticleThum: NextPage<SsrDataType> = ({ article, index }) => {
             alt="mainPoster"
           />
         </Link>
-        <Link href={`/article/${article.id}`}>
+        <Link href={`/article/${article.id}?index=${index}`}>
           <p
             css={css`
               position: relative;
@@ -68,17 +74,28 @@ const ArticleThum: NextPage<SsrDataType> = ({ article, index }) => {
             {article.title}
           </p>
         </Link>
-        k
+
         <div
           css={css`
             display: flex;
             justify-content: right;
+            align-items: center;
             padding-top: 15px;
-            font-size: 40px;
           `}
         >
-          <AiOutlineHeart
+          <span
             css={css`
+              font-size: 20px;
+              margin-top: 10px;
+              margin-right: 20px;
+            `}
+          >
+            {likeCount[index].like_count}
+          </span>
+          <AiTwotoneHeart
+            onClick={heartOnClick}
+            css={css`
+              font-size: 40px;
               color: ${color.primary};
               cursor: pointer;
               :hover {

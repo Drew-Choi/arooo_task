@@ -12,9 +12,7 @@ export const getArticleDetail = async (id: any) => {
       },
     });
 
-    // 데이터 잘 들어오면 아래 작업 시작
     if (response) {
-      console.log(response);
       return response;
     } else {
       console.log('데이터없음');

@@ -2,7 +2,7 @@ import { color } from '@/theme/theme_other';
 import { css } from '@emotion/react';
 import { NextPage } from 'next';
 import Image from 'next/image';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BsFillArrowDownCircleFill } from 'react-icons/bs';
 import FadeIn from '@/components/FadeIn';
 import { Fade } from '@mui/material';
@@ -10,6 +10,7 @@ import axios from 'axios';
 import { IndexDataType } from '@/function/types';
 import { useCallback, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { reqLike } from '@/store/modules/likeget';
 
 // 서버사이드렌더
 export const getServerSideProps = async () => {
@@ -42,6 +43,11 @@ type SsrDataType = {
   ssrData: [IndexDataType];
 };
 
+// 리덕스 state 타입
+interface LikeRedux {
+  likeget: { like: [] };
+}
+
 const Home: NextPage<SsrDataType> = ({ ssrData }) => {
   // 리덕스 state 타입
   interface TestRedux {
@@ -50,25 +56,25 @@ const Home: NextPage<SsrDataType> = ({ ssrData }) => {
   const scrollValue = useSelector((state: TestRedux) => state.scroll_Handle);
   console.log(scrollValue);
 
+  // 재랜더링용 리덕스활용
+  const dispatch = useDispatch();
+  // 좋아요는 리덕스에서 정보 바로바로 업데이트
+  const likeCount = useSelector((state: LikeRedux) => state.likeget.like);
+
   // 이전 skip위치 확인용
   const [skip, setSkip] = useState<number>(0);
-  console.log('skip위치: ', skip);
 
   // 이전 스크롤 위치 확인용
   const [scrollSpot, setScrollSpot] = useState<number>(2100);
-  console.log('stop위치: ', scrollSpot);
 
   // 첫 페이지 로딩시 SSR의 take값(고정)
   const Take = 9;
 
   // 처음에 SSR로 받아서 data전용 상태보관이 없어 생성
   const [data, setData] = useState<IndexDataType[]>([]);
-  console.log('데이터들어온다잉 :', data);
 
   // 무한스크롤, 스크롤 위치에 다라 요청이 가도록 설정
   const getArticleInfinit = useCallback(async () => {
-    console.log('큐!!!!!!!!');
-
     setScrollSpot((cur) => cur + 1350);
     const nextPage = skip + Take;
     try {
@@ -89,12 +95,28 @@ const Home: NextPage<SsrDataType> = ({ ssrData }) => {
   }, [skip]);
 
   useEffect(() => {
-    console.log('스크롤감시자!!!!!!!');
-
     if (scrollValue >= scrollSpot) {
       getArticleInfinit();
     }
   }, [scrollValue]);
+
+  // 좋아요 업데이트
+  const likeUpdate = async (id: number) => {
+    try {
+      const response = await axios.post(`/api/library/content/${id}/like`, {
+        like_count: 1,
+      });
+
+      if (response.status === 200) {
+        console.log(response.data.message);
+        dispatch(reqLike());
+      } else {
+        alert(response.data.message);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     // 메인 컨테이너
@@ -266,13 +288,25 @@ const Home: NextPage<SsrDataType> = ({ ssrData }) => {
           {ssrData &&
             scrollValue > 571 &&
             ssrData.map((article, index) => (
-              <ArticleThum index={index} key={article.id} article={article} />
+              <ArticleThum
+                likeCount={likeCount}
+                index={index}
+                key={article.id}
+                article={article}
+                heartOnClick={() => likeUpdate(article.id)}
+              />
             ))}
         </div>
         <div className="grid grid-cols-3 gap-5 mt-5">
           {data &&
             data.map((article, index) => (
-              <ArticleThum index={index} key={article.id} article={article} />
+              <ArticleThum
+                likeCount={likeCount}
+                index={index + 9}
+                key={article.id}
+                article={article}
+                heartOnClick={() => likeUpdate(article.id)}
+              />
             ))}
         </div>
       </section>
