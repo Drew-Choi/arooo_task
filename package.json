@@ -30,6 +30,7 @@
     "react-draft-wysiwyg": "^1.15.0",
     "react-icons": "^4.10.1",
     "react-redux": "^8.1.1",
+    "react-responsive": "^9.0.2",
     "react-virtualized": "^9.22.5",
     "redux": "^4.2.1",
     "sass": "^1.64.0",
@@ -40,6 +41,7 @@
     "@types/axios": "^0.14.0",
     "@types/draft-js": "^0.11.12",
     "@types/react-draft-wysiwyg": "^1.13.4",
+    "@types/react-responsive": "^8.0.5",
     "@types/react-virtualized": "^9.21.22",
     "prettier": "^3.0.0",
     "prisma": "^5.0.0"

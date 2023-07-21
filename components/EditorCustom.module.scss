@@ -14,7 +14,6 @@
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
 
- 
   }
 
   .editor_readOnly{
@@ -23,5 +22,9 @@
     height: auto;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
+
+    @media screen and (max-width: 450px) {
+      padding: 15px;
+    }
   }
 }

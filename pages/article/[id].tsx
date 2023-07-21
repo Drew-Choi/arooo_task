@@ -24,7 +24,6 @@ const EditorCustom = dynamic(() => import('@/components/EditorCustom'), {
 // Server-Side-Path
 export async function getStaticPaths() {
   const paths = await getPathId();
-  console.log(paths);
 
   return {
     paths,
@@ -107,75 +106,97 @@ const ArticleDetail: NextPage<any> = ({ postData }) => {
         position: relative;
         padding: 0px 20px;
         padding-top: 50px;
+
+        @media screen and (max-width: 625px) {
+          padding: 0px 5px;
+        }
       `}
     >
       <div
         css={css`
           display: flex;
           justify-content: space-evenly;
+
+          @media screen and (max-width: 990px) {
+            display: unset;
+            justify-content: unset;
+          }
         `}
       >
-        <Image
-          css={css`
-            border-radius: 10px;
-            box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.4);
-          `}
-          src={`/${postData?.img}`}
-          width={350}
-          height={500}
-          alt="poster"
-        />
-        <div css={css``}>
-          <p
+        <FadeIn index={2}>
+          <Image
             css={css`
-              position: relative;
-              text-align: center;
-              top: 50%;
-              transform: translateY(50%);
-              font-size: 20px;
-              font-weight: 600;
-              padding-right: 180px;
-              letter-spacing: 1px;
+              border-radius: 10px;
+              box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.4);
+              @media screen and (max-width: 990px) {
+                margin: 0px auto;
+              }
             `}
-          >
-            {postData?.title}
-          </p>
-          <div
-            css={css`
-              display: flex;
-              justify-content: right;
-              align-items: center;
-              padding-top: 15px;
-            `}
-          >
-            <span
+            src={`/${postData?.img}`}
+            width={350}
+            height={500}
+            alt="poster"
+          />
+        </FadeIn>
+
+        <FadeIn index={1}>
+          <div css={css``}>
+            <p
               css={css`
+                position: relative;
+                text-align: center;
+                top: 50%;
+                transform: translateY(50%);
                 font-size: 20px;
-                margin-top: 10px;
-                margin-right: 20px;
+                font-weight: 600;
+                padding-right: 180px;
+                letter-spacing: 1px;
+
+                @media screen and (max-width: 1389px) {
+                  padding-right: 0px;
+                  padding: 20px;
+                }
               `}
             >
-              {likeCount.length !== 0 && likeCount[idx].like_count}
-            </span>
-            <AiTwotoneHeart
-              onClick={() => likeUpdate(id)}
+              {postData?.title}
+            </p>
+            <div
               css={css`
-                font-size: 40px;
-                color: ${color.primary};
-                cursor: pointer;
-                :hover {
-                  color: #ffcf55;
-                }
-                :active {
-                  color: #fff3d3;
-                }
+                display: flex;
+                justify-content: right;
+                align-items: center;
+                padding-top: 15px;
               `}
-            />
+            >
+              <span
+                css={css`
+                  font-size: 20px;
+                  margin-top: 10px;
+                  margin-right: 20px;
+                `}
+              >
+                {likeCount.length !== 0 && likeCount[idx]?.like_count}
+              </span>
+              <AiTwotoneHeart
+                onClick={() => likeUpdate(id)}
+                css={css`
+                  font-size: 40px;
+                  color: ${color.primary};
+                  cursor: pointer;
+                  :hover {
+                    color: #ffcf55;
+                  }
+                  :active {
+                    color: #fff3d3;
+                  }
+                `}
+              />
+            </div>
           </div>
-        </div>
+        </FadeIn>
       </div>
 
-      <FadeIn index={2}>
+      <FadeIn index={3}>
         <div>
           <EditorCustom
             readOnly={true}
@@ -184,7 +205,7 @@ const ArticleDetail: NextPage<any> = ({ postData }) => {
           />
         </div>
       </FadeIn>
-      <FadeIn index={3}>
+      <FadeIn index={1}>
         <Link
           href="/"
           css={css`

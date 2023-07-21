@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import FadeIn from './FadeIn';
 
@@ -96,6 +95,13 @@ const StyleBox = styled.div`
 // 서브타이틀----
 const SubTitle = styled.p`
   margin: 0px;
+
+  @media screen and (max-width: 630px) {
+    padding-right: 0px;
+  }
+  @media screen and (max-width: 557px) {
+    display: none;
+  }
 `;
 
 // Navbar컴포넌트 props타입
@@ -166,7 +172,7 @@ const Navbar: NextPage<navProps> = ({ navTextArr, currentURL }) => {
                 `}
               >
                 |
-              </span>{' '}
+              </span>
               Welcom to Cinema Article
             </SubTitle>
           </FadeIn>

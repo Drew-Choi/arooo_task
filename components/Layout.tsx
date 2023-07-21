@@ -56,8 +56,6 @@ const Layout: NextPage<LayoutProps> = ({ children, currentURL }) => {
       try {
         const response = await axios.get('/api/getLike');
 
-        console.log(response);
-
         if (response.status !== 200) return alert(response.data.message);
         dispatch(like(response.data.items));
       } catch (err) {

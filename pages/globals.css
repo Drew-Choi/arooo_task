@@ -7,4 +7,5 @@ body {
   margin: 0px;
   padding: 0px;
   font-family: 'AppleSDGothicNeo', sans-serif;
+  overflow-x: hidden;
 }

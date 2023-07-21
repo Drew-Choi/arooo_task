@@ -31,6 +31,15 @@ const ArticleThum: NextPage<SsrDataType> = ({
           background-color: white;
           padding: 30px 20px;
           border-radius: 10px;
+          @media screen and (max-width: 800px) {
+            width: 30vw;
+          }
+          @media screen and (max-width: 600px) {
+            width: 40vw;
+          }
+          @media screen and (max-width: 462px) {
+            width: 90vw;
+          }
         `}
       >
         <Link href={`/article/${article.id}?index=${index}`}>

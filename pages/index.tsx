@@ -11,10 +11,10 @@ import { IndexDataType } from '@/function/types';
 import { useCallback, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { reqLike } from '@/store/modules/likeget';
+import MediaQuery from 'react-responsive';
 
 // 서버사이드렌더
 export const getServerSideProps = async () => {
-  console.log('server');
   try {
     const response = await axios.get(
       `http://localhost:3000/api/library/content?skip=0&take=9`,
@@ -54,7 +54,6 @@ const Home: NextPage<SsrDataType> = ({ ssrData }) => {
     scroll_Handle: number;
   }
   const scrollValue = useSelector((state: TestRedux) => state.scroll_Handle);
-  console.log(scrollValue);
 
   // 재랜더링용 리덕스활용
   const dispatch = useDispatch();
@@ -117,6 +116,21 @@ const Home: NextPage<SsrDataType> = ({ ssrData }) => {
       console.error(err);
     }
   };
+
+  // 화면 가로폭 구하기
+  const [windowWidth, setWindowWidth] = useState(0);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    handleResize(); // 초기 렌더링 시 화면 너비 가져오기
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     // 메인 컨테이너
@@ -284,7 +298,15 @@ const Home: NextPage<SsrDataType> = ({ ssrData }) => {
           margin-bottom: 200px;
         `}
       >
-        <div className="grid grid-cols-3 gap-5">
+        <div
+          className={`grid ${
+            windowWidth < 600 && windowWidth >= 500
+              ? 'grid-cols-2'
+              : windowWidth < 500
+              ? 'grid-cols-1'
+              : 'grid-cols-3'
+          } gap-5`}
+        >
           {ssrData &&
             scrollValue > 571 &&
             ssrData.map((article, index) => (
@@ -297,7 +319,16 @@ const Home: NextPage<SsrDataType> = ({ ssrData }) => {
               />
             ))}
         </div>
-        <div className="grid grid-cols-3 gap-5 mt-5">
+
+        <div
+          className={`grid ${
+            windowWidth < 600 && windowWidth >= 500
+              ? 'grid-cols-2'
+              : windowWidth < 500
+              ? 'grid-cols-1'
+              : 'grid-cols-3'
+          } gap-5`}
+        >
           {data &&
             data.map((article, index) => (
               <ArticleThum
