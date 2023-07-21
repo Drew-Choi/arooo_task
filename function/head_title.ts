@@ -4,7 +4,7 @@ export const head_title = (pathname: string): string | undefined => {
       return ' | Home';
     case '/write':
       return ' | Write';
-    case '/[uid]':
+    case '/article/[id]':
       return ' | Article';
     default:
       return ' | ';

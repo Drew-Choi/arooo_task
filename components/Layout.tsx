@@ -31,7 +31,7 @@ const Layout: NextPage<LayoutProps> = ({ children, currentURL }) => {
       dispatch(value(window.scrollY));
     };
 
-    if (currentURL !== '/write') {
+    if (currentURL !== '/write' && currentURL !== '/article/[id]') {
       window.addEventListener('scroll', handleScrollValue);
     }
 

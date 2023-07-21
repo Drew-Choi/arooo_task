@@ -1,5 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-import { EditorState, convertFromRaw } from 'draft-js';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const prisma = new PrismaClient();

@@ -6,6 +6,7 @@ import { AiOutlineHeart } from 'react-icons/ai';
 import { color } from '@/theme/theme_other';
 import FadeIn from './FadeIn';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 // ssr 프롭스 데이터 타입 설정
 type SsrDataType = {
@@ -26,43 +27,48 @@ const ArticleThum: NextPage<SsrDataType> = ({ article, index }) => {
           border-radius: 10px;
         `}
       >
-        <Image
-          css={css`
-            border-radius: 10px;
-            margin: auto;
-            cursor: pointer;
-            transition: 0.4s ease-in-out;
-            :hover {
-              transform: scale(1.1);
-              transform-origin: center;
-            }
-            :active {
-              transform: scale(1.4);
-            }
-          `}
-          src={`/${article.img}`}
-          width={200}
-          height={285}
-          alt="mainPoster"
-        />
-        <p
-          css={css`
-            position: relative;
-            font-size: 15px;
-            margin-top: 30px;
-            text-align: justify;
-            cursor: pointer;
+        <Link href={`/article/${article.id}`}>
+          <Image
+            css={css`
+              border-radius: 10px;
+              margin: auto;
+              cursor: pointer;
+              transition: 0.4s ease-in-out;
+              :hover {
+                transform: scale(1.1);
+                transform-origin: center;
+              }
+              :active {
+                transform: scale(1.4);
+              }
+            `}
+            src={`/${article.img}`}
+            width={200}
+            height={285}
+            alt="mainPoster"
+          />
+        </Link>
+        <Link href={`/article/${article.id}`}>
+          <p
+            css={css`
+              position: relative;
+              font-size: 15px;
+              margin-top: 30px;
+              text-align: justify;
+              cursor: pointer;
 
-            :hover {
-              color: gray;
-            }
-            :active {
-              color: #bdbdbd;
-            }
-          `}
-        >
-          {article.title}
-        </p>
+              :hover {
+                color: gray;
+              }
+              :active {
+                color: #bdbdbd;
+              }
+            `}
+          >
+            {article.title}
+          </p>
+        </Link>
+        k
         <div
           css={css`
             display: flex;

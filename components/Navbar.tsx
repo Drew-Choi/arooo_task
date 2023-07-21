@@ -35,14 +35,18 @@ const Nav = styled.nav`
 const LogoWrap = styled.div`
   position: relative;
   display: ${({ scrollValue, currentURL }: StyledProps) =>
-    currentURL === '/write' ? 'flex' : scrollValue < 10 ? 'none' : 'flex'};
+    currentURL === '/write' || currentURL === '/article/[id]'
+      ? 'flex'
+      : scrollValue < 10
+      ? 'none'
+      : 'flex'};
   height: 50px;
   justify-content: center;
   align-items: center;
   padding: 0px 20px;
 
   transform: ${({ scrollValue, currentURL }: StyledProps) =>
-    currentURL === '/write'
+    currentURL === '/write' || currentURL === '/article/[id]'
       ? 'translateY(0)'
       : scrollValue < 70
       ? 'translateY(-60px)'
@@ -63,7 +67,11 @@ const Logo = styled.p`
 const StyleBox = styled.div`
   position: relative;
   display: ${({ scrollValue, currentURL }: StyledProps) =>
-    currentURL === '/write' ? 'flex' : scrollValue < 10 ? 'none' : 'flex'};
+    currentURL === '/write' || currentURL === '/article/[id]'
+      ? 'flex'
+      : scrollValue < 10
+      ? 'none'
+      : 'flex'};
   justify-content: center;
   align-items: center;
   height: 50px;
@@ -76,7 +84,7 @@ const StyleBox = styled.div`
   margin-right: 20px;
 
   transform: ${({ scrollValue, currentURL }: StyledProps) =>
-    currentURL === '/write'
+    currentURL === '/write' || currentURL === '/article/[id]'
       ? 'translateY(0)'
       : scrollValue < 70
       ? 'translateY(-60px)'
@@ -142,6 +150,24 @@ const Navbar: NextPage<navProps> = ({ navTextArr, currentURL }) => {
                 |
               </span>{' '}
               Write Your Criticism
+            </SubTitle>
+          </FadeIn>
+        ) : currentURL === '/article/[id]' ? (
+          <FadeIn index={0}>
+            <SubTitle
+              css={css`
+                font-size: 15px;
+                padding: 20px;
+              `}
+            >
+              <span
+                css={css`
+                  padding-right: 15px;
+                `}
+              >
+                |
+              </span>{' '}
+              Welcom to Cinema Article
             </SubTitle>
           </FadeIn>
         ) : (
