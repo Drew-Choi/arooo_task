@@ -7,9 +7,10 @@ import { BsFillArrowDownCircleFill } from 'react-icons/bs';
 import FadeIn from '@/components/FadeIn';
 import { Fade } from '@mui/material';
 import axios from 'axios';
-import ArticleThum from '@/components/ArticleThum';
 import { IndexDataType } from '@/function/types';
 import { useCallback, useEffect, useState } from 'react';
+import { AutoSizer, List } from 'react-virtualized';
+import dynamic from 'next/dynamic';
 
 // 서버사이드렌더
 export const getServerSideProps = async () => {
@@ -33,6 +34,10 @@ export const getServerSideProps = async () => {
   }
 };
 // -------------------------------------------------------
+
+// ---- 다이나믹 임폴트
+const ArticleThum = dynamic(() => import('../components/ArticleThum'));
+
 // ssr 프롭스 데이터 타입 설정
 type SsrDataType = {
   ssrData: [IndexDataType];
@@ -258,19 +263,41 @@ const Home: NextPage<SsrDataType> = ({ ssrData }) => {
           margin-bottom: 200px;
         `}
       >
-        <div className="grid grid-cols-3 gap-5">
-          {ssrData &&
-            scrollValue > 571 &&
-            ssrData.map((article, index) => (
-              <ArticleThum index={index} key={article.id} article={article} />
-            ))}
-        </div>
-        <div className="grid grid-cols-3 gap-5 mt-5">
-          {data &&
-            data.map((article, index) => (
-              <ArticleThum index={index} key={article.id} article={article} />
-            ))}
-        </div>
+        <AutoSizer>
+          {({ height, width }) => (
+            <List
+              height={850}
+              width={1600}
+              rowCount={ssrData.length + data.length}
+              rowHeight={600}
+              rowRenderer={({ index, key, style }) => (
+                <>
+                  <div className="grid grid-cols-3 gap-5">
+                    {ssrData &&
+                      scrollValue > 571 &&
+                      ssrData.map((article, index) => (
+                        <ArticleThum
+                          index={index}
+                          key={article.id}
+                          article={article}
+                        />
+                      ))}
+                  </div>
+                  <div className="grid grid-cols-3 gap-5 mt-5">
+                    {data &&
+                      data.map((article, index) => (
+                        <ArticleThum
+                          index={index}
+                          key={article.id}
+                          article={article}
+                        />
+                      ))}
+                  </div>
+                </>
+              )}
+            />
+          )}
+        </AutoSizer>
       </section>
     </main>
   );
