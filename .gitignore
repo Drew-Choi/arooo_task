@@ -28,11 +28,11 @@ yarn-error.log*
 .env*.local
 
 # .env //과제 제출 위해 ignore잠시 제외
-# .env
+.env
 
 # vercel
 .vercel
 
 # typescript //과제 제출 위해 ignore잠시 제외
-# *.tsbuildinfo
-# next-env.d.ts
+*.tsbuildinfo
+next-env.d.ts
