@@ -1,5 +1,4 @@
 // 파람스 아이디와 일치하는 아티클 정보 불러오기
-
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();

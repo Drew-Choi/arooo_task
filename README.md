@@ -2,6 +2,11 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+node_modules 설치 위해 clone 후
+-> yarn install 실행
+
+과제 제출을 위해 잠시 .env 파일 gitignore에서 제외하여 git push 했습니다.
+
 First, run the development server:
 
 ```bash
